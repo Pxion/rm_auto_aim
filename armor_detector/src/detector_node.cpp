@@ -212,7 +212,7 @@ void ArmorDetectorNode::imageCallback(const sensor_msgs::msg::Image::ConstShared
           yaw_pnp->sys_yaw = original_yaw;
 
           // 设置装甲板四点坐标
-          yaw_pnp->setWorldPoints(object_points);
+          yaw_pnp->setWorldPoints(object_points,armor.number);
           yaw_pnp->setImagePoints(image_points);
 
           // 通过类成员函数调用 getYaw

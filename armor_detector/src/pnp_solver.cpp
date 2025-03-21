@@ -125,7 +125,12 @@ double YawPnP::getYawByMix(double pixel_yaw, double angle_yaw) const {
     return append_yaw;
 }
 
-void YawPnP::setWorldPoints(const std::vector<cv::Point3f>& object_points) { 
+void YawPnP::setWorldPoints(const std::vector<cv::Point3f>& object_points,const std::string& number) { 
+    number_ = number;//设置装甲板数字类型
+    // 添加空值检查
+    if (object_points.empty()) {
+        throw std::invalid_argument("Object points cannot be empty");
+    }
     P_world.clear();
     for (const auto& p : object_points) {
         P_world.push_back(Eigen::Vector4d(0, -(p.x * 1e-3), -(p.y * 1e-3), 1));
@@ -202,19 +207,15 @@ std::vector<Eigen::Vector4d> YawPnP::getMapping(double append_yaw) const {
 
     double yaw = sys_yaw + append_yaw;
     double pitch;
-    switch(elevation) {
-        case ARMOR_ELEVATION_UP_15:
-            pitch = ANGLE_UP_15;
-            break;
-        case ARMOR_ELEVATION_UP_75:
-            pitch = ANGLE_UP_75;
-            break;
-        case ARMOR_ELEVATION_DOWN_15:
-            pitch = ANGLE_DOWN_15;
-            break;
-        default:
-            pitch = 0;
-            break;
+    
+    //根据装甲板数字类型设置俯仰角
+    if (number_ == "outpost"){
+
+        pitch = rm_auto_aim::ANGLE_DOWN_15;
+
+    } else {
+
+        pitch = rm_auto_aim::ANGLE_UP_15;
     }
 
     pitch = -pitch;

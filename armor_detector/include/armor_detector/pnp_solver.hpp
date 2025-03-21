@@ -17,8 +17,6 @@
 // 添加 Eigen 头文件包含
 #include <Eigen/Dense>
 
-// 添加 ArmorElevation 类型前置声明
-enum class ArmorElevation;
 
 // 前置声明
 class YawPnP;
@@ -29,21 +27,12 @@ namespace rm_auto_aim
 class YawPnP {
 public:
     YawPnP() {}
-    YawPnP(ArmorElevation elevation) : elevation(elevation) {}
-    
-    // 修复构造函数参数类型
-    YawPnP(const std::vector<cv::Point2f>& image_points,
-          const std::vector<cv::Point3f>& world_points,
-          const cv::Mat& camera_matrix,
-          const cv::Mat& dist_coeffs);
-
-    void setWorldPoints(const std::vector<cv::Point3f>& object_points);
+  
+    void setWorldPoints(const std::vector<cv::Point3f>& object_points,const std::string& number);
     void setImagePoints(const std::vector<cv::Point2f>& image_points);
 
     double operator()(double append_yaw) const;
 
-    ArmorElevation setElevation(double pitch);
-    //ArmorElevation setElevation(rm_auto_aim::ArmorID armor_id);
     std::vector<Eigen::Vector4d> getMapping(double append_yaw) const;
     std::vector<Eigen::Vector2d> getProject(const std::vector<Eigen::Vector4d>& P_world) const;
     double getCost(const std::vector<Eigen::Vector2d>& P_project, double append_yaw) const;
@@ -61,7 +50,7 @@ public:
 
     double          sys_yaw;
     Eigen::Vector4d pose;
-    ArmorElevation  elevation;
+    std::string number_; //存储装甲板数字类型
 
     std::vector<Eigen::Vector2d> P_pixel;      // 四点真实像素坐标
     std::vector<Eigen::Vector4d> P_world;      // 四点正对世界坐标

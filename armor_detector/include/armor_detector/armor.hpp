@@ -63,13 +63,6 @@ struct Armor
   std::string classfication_result;
 };
 
-enum ArmorElevation {
-    ARMOR_ELEVATION_UP_15,
-    ARMOR_ELEVATION_UP_75,
-    ARMOR_ELEVATION_DOWN_15,
-    ARMOR_ELEVATION_NONE
-};
-
 // 在类定义前添加角度常量（单位：弧度）
 constexpr double ANGLE_UP_15 = 15.0 * M_PI / 180.0;
 constexpr double ANGLE_UP_75 = 75.0 * M_PI / 180.0;
